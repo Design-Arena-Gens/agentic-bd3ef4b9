@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatore Risparmio Fotovoltaico</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .calculator-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .slider-container {
+            position: relative;
+            margin-top: 15px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .value-display {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 18px;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .results {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            color: white;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .result-label {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .result-value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .savings-highlight {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .savings-highlight .label {
+            font-size: 14px;
+            margin-bottom: 5px;
+            opacity: 0.9;
+        }
+
+        .savings-highlight .value {
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        .icon {
+            margin-right: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .calculator-container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .result-value {
+                font-size: 20px;
+            }
+
+            .savings-highlight .value {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <h1>☀️ Calcolatore Risparmio Fotovoltaico</h1>
+        <p class="subtitle">Scopri quanto puoi risparmiare con un impianto fotovoltaico</p>
+
+        <div class="input-group">
+            <label for="consumption">
+                💡 Consumo Annuale di Energia
+            </label>
+            <span class="value-display"><span id="consumptionValue">3000</span> kWh/anno</span>
+            <div class="slider-container">
+                <input type="range" id="consumption" min="1000" max="10000" value="3000" step="100">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="energyPrice">
+                💰 Prezzo dell'Energia
+            </label>
+            <span class="value-display"><span id="priceValue">0.25</span> €/kWh</span>
+            <div class="slider-container">
+                <input type="range" id="energyPrice" min="0.10" max="0.50" value="0.25" step="0.01">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="systemSize">
+                ⚡ Potenza Impianto
+            </label>
+            <span class="value-display"><span id="sizeValue">3.0</span> kW</span>
+            <div class="slider-container">
+                <input type="range" id="systemSize" min="1.0" max="10.0" value="3.0" step="0.5">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="efficiency">
+                📊 Efficienza Copertura Consumo
+            </label>
+            <span class="value-display"><span id="efficiencyValue">70</span>%</span>
+            <div class="slider-container">
+                <input type="range" id="efficiency" min="50" max="90" value="70" step="5">
+            </div>
+        </div>
+
+        <div class="results">
+            <div class="result-item">
+                <span class="result-label">💸 Costo Annuale Attuale</span>
+                <span class="result-value" id="currentCost">€750</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">🔋 Energia Prodotta</span>
+                <span class="result-value" id="energyProduced">3000 kWh</span>
+            </div>
+            <div class="result-item">
+                <span class="result-label">💡 Energia Autoconsumata</span>
+                <span class="result-value" id="selfConsumed">2100 kWh</span>
+            </div>
+            <div class="savings-highlight">
+                <div class="label">🌟 RISPARMIO ANNUALE STIMATO</div>
+                <div class="value" id="annualSavings">€525</div>
+            </div>
+            <div class="result-item" style="margin-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.3); padding-top: 15px;">
+                <span class="result-label">📅 Risparmio in 25 anni</span>
+                <span class="result-value" id="totalSavings">€13,125</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const consumptionSlider = document.getElementById('consumption');
+        const priceSlider = document.getElementById('energyPrice');
+        const sizeSlider = document.getElementById('systemSize');
+        const efficiencySlider = document.getElementById('efficiency');
+
+        const consumptionValue = document.getElementById('consumptionValue');
+        const priceValue = document.getElementById('priceValue');
+        const sizeValue = document.getElementById('sizeValue');
+        const efficiencyValue = document.getElementById('efficiencyValue');
+
+        const currentCost = document.getElementById('currentCost');
+        const energyProduced = document.getElementById('energyProduced');
+        const selfConsumed = document.getElementById('selfConsumed');
+        const annualSavings = document.getElementById('annualSavings');
+        const totalSavings = document.getElementById('totalSavings');
+
+        function calculate() {
+            const consumption = parseFloat(consumptionSlider.value);
+            const price = parseFloat(priceSlider.value);
+            const size = parseFloat(sizeSlider.value);
+            const efficiency = parseFloat(efficiencySlider.value) / 100;
+
+            // Produzione stimata: circa 1000-1100 kWh per kW in Italia
+            const production = size * 1100;
+
+            // Energia autoconsumata basata sull'efficienza
+            const selfConsumedEnergy = Math.min(production * efficiency, consumption);
+
+            // Costi e risparmi
+            const currentYearlyCost = consumption * price;
+            const yearlySavings = selfConsumedEnergy * price;
+            const savings25Years = yearlySavings * 25;
+
+            // Aggiorna visualizzazione
+            consumptionValue.textContent = consumption.toLocaleString('it-IT');
+            priceValue.textContent = price.toFixed(2);
+            sizeValue.textContent = size.toFixed(1);
+            efficiencyValue.textContent = Math.round(efficiency * 100);
+
+            currentCost.textContent = '€' + currentYearlyCost.toLocaleString('it-IT', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            energyProduced.textContent = production.toLocaleString('it-IT', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' kWh';
+            selfConsumed.textContent = selfConsumedEnergy.toLocaleString('it-IT', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' kWh';
+            annualSavings.textContent = '€' + yearlySavings.toLocaleString('it-IT', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            totalSavings.textContent = '€' + savings25Years.toLocaleString('it-IT', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        }
+
+        consumptionSlider.addEventListener('input', calculate);
+        priceSlider.addEventListener('input', calculate);
+        sizeSlider.addEventListener('input', calculate);
+        efficiencySlider.addEventListener('input', calculate);
+
+        // Calcolo iniziale
+        calculate();
+    </script>
+</body>
+</html>
